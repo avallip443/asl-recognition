@@ -6,7 +6,7 @@ if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
 
 # create classes for each symbol (26 for each letter)
-number_of_classes = 26  
+number_of_classes = 3  
 dataset_size = 100  
 
 cap = cv2.VideoCapture(0)  # change index based on camera
@@ -39,7 +39,7 @@ for i in range(number_of_classes):
         elif key == ord('q'):  # exit program
             cap.release()
             cv2.destroyAllWindows()
-            exit() 
+            exit()
 
     counter = 0
     while counter < dataset_size:
@@ -58,7 +58,7 @@ for i in range(number_of_classes):
         if cv2.waitKey(25) == ord('q'):  # exit program 
             cap.release()
             cv2.destroyAllWindows()
-            exit() 
+            exit()
 
 cap.release()
 cv2.destroyAllWindows()
