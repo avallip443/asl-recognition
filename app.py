@@ -4,17 +4,19 @@ import numpy as np
 import pickle
 import socket
 from test_classifier import generate
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, send_file
+import os
+from test_classifier import cap
 
 # Initialize Flask app
-app = Flask(__name__)
-
-# Initialize webcam
-cap = cv2.VideoCapture(0)
+app = Flask(__name__, static_url_path='/static', static_folder='static')
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.jinja_env.globals['__name__'] = '__main__'  # Disable template caching
+app.jinja_env.cache = {}
 
 @app.route('/')
 def index():
-    """Render the home page with dynamic video feed."""
+    print("Rendering index.html")
     return render_template('index.html')
 
 def get_free_port():
@@ -26,6 +28,7 @@ def get_free_port():
 def video_feed():
     """Generate video feed for the web page."""
     return Response(generate(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
 
 if __name__ == '__main__':
     try:

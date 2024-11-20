@@ -1,7 +1,7 @@
 import cv2
 import mediapipe as mp
 import numpy as np
-import pickle
+import pickle,base64,os
 
 # load model
 model_dict = pickle.load(open('./model.p', 'rb'))
@@ -18,12 +18,10 @@ hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
 labels_dict = {0: 'A', 1: 'B', 2: 'L'}
 def generate():
     while True:
+        
         ret, frame = cap.read()
         if not ret:
             break
-
-         # Flip the frame horizontally to create a mirror effect
-        frame = cv2.flip(frame, 1)
 
         data_aux = []
         x_ = []
@@ -72,3 +70,5 @@ def generate():
         _, jpeg = cv2.imencode('.jpg', frame)
         yield (b'--frame\r\n'
             b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n')  
+        
+
