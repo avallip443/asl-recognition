@@ -3,15 +3,41 @@
 ## Description
 This project implements an ASL recognition system using computer vision and machine learning. It processes hand landmarks detected by Mediapipe and trains a model to recognize gestures.
 
-## Create dataset - WIP
-1. Set up virtual environment
+## Data Collection
+The script `collect_data.py` collected image data from a webcam to create a dataset for a specified number of gestures (classes). Here's how it works:
+
+### Overview
+Each dataset will be saved in the `./data` directory with each gesture (class) having its own subdirectory (e.g. `./data/0`).
+A user can specify:
+- The total number of classes (`NUMBER_OF_CLASSES`).
+- The number of images per class (`DATASET_SIZE`).
+
+### Set Up 
+Before running the script, it is recommended to use a virtual environment.
+
+1. Install `virtualenv ` (if not already installed)
+```bash
 pip install virtualenv
-
-Navigate to project folder
-
+```
+2. Create a virtual environment
+```bash
 python -m venv venv
-
+```
+3. Active the virtual environment
+- Windows:
+```bash
 .\venv\Scripts\activate
+```
+- macOS/Linux:
+```bash
+source venv/bin/activate
+```
+4. Install project dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### Data Collection Process
 
 
 ## Dependencies
@@ -31,5 +57,3 @@ Install the required libraries with the following command:
 ```bash
 pip install opencv-python mediapipe matplotlib numpy scikit-learn
 ```
-
-
