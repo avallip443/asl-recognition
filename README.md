@@ -30,8 +30,6 @@ Install the required libraries with the following command:
 
 ```bash
 pip install opencv-python mediapipe matplotlib numpy scikit-learn
-
-
-
+```
 
 
