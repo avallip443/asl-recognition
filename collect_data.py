@@ -8,7 +8,7 @@ if not os.path.exists(DATA_DIR):
 
 # number of classes (eg. A, B) and number of images per class
 NUMBER_OF_CLASSES = 3  
-DATASET_SIZE  = 100  
+DATASET_SIZE  = 500  
 
 # set up webcam 
 cap = cv2.VideoCapture(0)  # change index if nultiple cameras are connected
@@ -31,7 +31,8 @@ for class_id in range(NUMBER_OF_CLASSES):
 # collect data for each class
 for class_id in range(NUMBER_OF_CLASSES):
     print(f'Collecting data for class {class_id}')
-
+    class_dir = os.path.join(DATA_DIR, str(class_id))
+    
     # wait for user input to start collecting for each class
     while True:
         ret, frame = cap.read()        
