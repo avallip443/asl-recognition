@@ -5,6 +5,7 @@ This project implements an ASL recognition system using computer vision and mach
 
 ## Table of Contents
 - [Data Collection](#data-collection)
+- [Dataset Creation](#dataset-creation)
 - [Dependencies](#dependencies)
 - [Installation](#installation)
 
@@ -47,6 +48,24 @@ Once the script is running, it will prompt you to press keys to start collecting
 - Images collected are specified by the total number of classes (`NUMBER_OF_CLASSES`) and the number of images per class (`DATASET_SIZE`).
 - The webcam feed will display instructions. Press "1" to start collecting images for the current class or "q" to quit.
 
+
+## Dataset Creation
+The script `create_dataset.py` processes the image sets to create a dataset of hand landmarks for training ASL gesture recognition models. It uses `Mediapipe` to detect hand landmarks from image and saves the extracted data and its corresponding labels to a `.pickle` file.
+
+### Set up
+It is assumed that the virtual environment has been set up before running the script.
+
+1. Prepare the dataset directoru
+- Images should be in subdirectories of `./data`.
+2. Run the script
+```bash
+python create_dataset.py
+```
+3. Output
+- The processed dataset will be saves as `.pickle` in the rot directory.
+
+### Important Notes
+- Ensure that the images in the `./data` directory are of good quality and contain visible hands for best results.
 
 ## Dependencies
 The following libraries are required to run the project:
