@@ -53,15 +53,13 @@ Once the script is running, it will prompt you to press keys to start collecting
 The script `create_dataset.py` processes the image sets to create a dataset of hand landmarks for training ASL gesture recognition models. It uses `Mediapipe` to detect hand landmarks from image and saves the extracted data and its corresponding labels to a `.pickle` file.
 
 ### Set up
-It is assumed that the virtual environment has been set up before running the script.
+It is assumed that the virtual environment has been set up and the images are in the `./data` directory before running the script.
 
-1. Prepare the dataset directoru
-- Images should be in subdirectories of `./data`.
-2. Run the script
+1. Run the script
 ```bash
 python create_dataset.py
 ```
-3. Output
+2. Output
 - The processed dataset will be saves as `.pickle` in the rot directory.
 
 ### Important Notes
