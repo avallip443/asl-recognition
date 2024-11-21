@@ -67,16 +67,15 @@ python create_dataset.py
 
 ## Dependencies
 The following libraries are required to run the project:
-- `os`: Built-in Python module for file and directory management (no installation required).
-- `pickle`: Built-in Python module for serializing and de-serializing objects (no installation required).
-- `mediapipe`: For hand landmarks detection.
-- `matplotlib`: For plotting and visualization.
-- `numpy`: For numerical computations.
-- `opencv-python`: For image and video processing.
-- `scikit-learn`: For machine learning algorithms.
+- `mediapipe`
+- `matplotlib`
+- `numpy`
+- `opencv-python`
+- `os`
+- `pickle`
+- `scikit-learn`
 
 ## Installation
-
 Install the required libraries with the following command:
 
 ```bash
