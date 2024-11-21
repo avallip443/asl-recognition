@@ -54,9 +54,15 @@ def create_dataset(data_dir, output_file):
             image_path = os.path.join(class_path, image_file)
 
             try:
-                data_points, label = process_image(image_path, class_dir)
-                data.append(data_points)
-                labels.append(label)
+                data_points, label, shape = process_image(image_path, class_dir)
+
+                if len(data_points) == 21:  # mediapipe returns 21 points, each with (x, y)
+                    data.append(data_points)
+                    labels.append(label)
+                else:
+                    print(f"Skipping image due to incomplete landmarks: {image_file}")
+                    print(f"Incomplete landmarks in {image_file}: Dimensions {shape} Length {len(data_points)}")
+
             except Exception as e:
                 print(f"Error processing {image_file}: {e}")
 
@@ -95,7 +101,7 @@ def process_image(image_path, class_label):
     else:
         print(f"No hand landmarks detected in {image_path}")
     
-    return data_points, class_label
+    return data_points, class_label, img.shape
 
 
 def save_dataset(output_file, dataset, labels):
