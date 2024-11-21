@@ -3,14 +3,14 @@
 ## Description
 This project implements an ASL recognition system using computer vision and machine learning. It processes hand landmarks detected by Mediapipe and trains a model to recognize gestures.
 
-## Data Collection
-The script `collect_data.py` collected image data from a webcam to create a dataset for a specified number of gestures (classes). Here's how it works:
+## Table of Contents
+- [Data Collection](#data-collection)
+- [Dependencies](#dependencies)
+- [Installation](#installation)
 
-### Overview
-Each dataset will be saved in the `./data` directory with each gesture (class) having its own subdirectory (e.g. `./data/0`).
-A user can specify:
-- The total number of classes (`NUMBER_OF_CLASSES`).
-- The number of images per class (`DATASET_SIZE`).
+
+## Data Collection
+The script `collect_data.py` collect images from a webcam to create a dataset for ASL gestures (classes). Here's how it works:
 
 ### Set Up 
 Before running the script, it is recommended to use a virtual environment.
@@ -36,8 +36,16 @@ source venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
+5. Run the script
+```bash
+python collect_data.py
+```
 
-### Data Collection Process
+### Image Collection Process
+Once the script is running, it will prompt you to press keys to start collecting image data for each gesture (class). The data is captured via your webcamera.
+- Each image set will be stored in the appropriate subdirectory in the `./data` directory (e.g. `./data/0` for class 0).
+- Images collected are specified by the total number of classes (`NUMBER_OF_CLASSES`) and the number of images per class (`DATASET_SIZE`).
+- The webcam feed will display instructions. Press "1" to start collecting images for the current class or "q" to quit.
 
 
 ## Dependencies
