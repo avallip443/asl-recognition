@@ -67,6 +67,7 @@ python create_dataset.py
 
 ## Dependencies
 The following libraries are required to run the project:
+- `flask`
 - `mediapipe`
 - `matplotlib`
 - `numpy`
@@ -79,5 +80,5 @@ The following libraries are required to run the project:
 Install the required libraries with the following command:
 
 ```bash
-pip install opencv-python mediapipe matplotlib numpy scikit-learn
+pip install flask opencv-python mediapipe matplotlib numpy scikit-learn
 ```
