@@ -19,10 +19,10 @@ data = data.reshape(data.shape[0], -1)
 # create training and test sets
 x_train, x_test, y_train, y_test = train_test_split(data, labels, test_size=0.2, shuffle=True, stratify=labels)
 
-# train model 
+# define a CNN model architecture 
 def create_model():
     model = models.Sequential([
-        Input(shape=(128, 128, 3)),
+        Input(shape=(1080, 620, 3)),
         layers.Conv2D(32, (3, 3), activation='relu'),
         layers.MaxPooling2D((2, 2)),
         layers.Conv2D(64, (3, 3), activation='relu'),
