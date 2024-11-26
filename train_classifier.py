@@ -14,7 +14,7 @@ data = np.asarray(data_dict['data'])
 labels = np.asarray(data_dict['labels'])
 
 # normalize data
-data = data / np.max(data)
+data = data / 255.0
 
 # flatten the data 
 data = data.reshape(data.shape[0], -1)
@@ -26,21 +26,22 @@ label_encoder = LabelEncoder()
 y_train = label_encoder.fit_transform(y_train)
 y_test = label_encoder.fit_transform(y_test)
 
-print("Category Mapping:", dict(zip(y_train, y_train)))
-print("Category Mapping:", dict(zip(y_test, y_test)))
-
 print(x_train.shape, y_train.shape) 
 print(x_test.shape, y_test.shape)
 
 # define a CNN model architecture 
 def create_model():
     model = models.Sequential([
-        Input(shape=(42, 42, 3)),
+        Input(shape=(512, 512, 3)),
         layers.Conv2D(32, (3, 3), activation='relu'),
         layers.MaxPooling2D((2, 2)),
         layers.Conv2D(64, (3, 3), activation='relu'),
         layers.MaxPooling2D((2, 2)),
         layers.Conv2D(128, (3, 3), activation='relu'),
+        layers.MaxPooling2D((2, 2)),
+        layers.Conv2D(256, (3, 3), activation='relu'),
+        layers.MaxPooling2D((2, 2)),
+        layers.Conv2D(512, (3, 3), activation='relu'),
         layers.MaxPooling2D((2, 2)),
         layers.Flatten(),
         layers.Dense(64, activation='relu'),
@@ -67,7 +68,7 @@ for train_index, val_index in skf.split(x_train, y_train):
     print(f"\nModel architecture for fold {fold_no}:")
     model.summary()
     
-    # Fit the model 
+    # train classifers
     model.fit(
         x_train_fold,
         y_train_fold,
@@ -78,10 +79,6 @@ for train_index, val_index in skf.split(x_train, y_train):
     )
     
     fold_no += 1
-
-# train classifers
-# history = model.fit(train_generator, validation_data=val_generator, epochs=5, verbose=1)
-# model.fit(x_train, y_train, epochs=20)
 
 # create predictions
 y_predict = model.predict(x_test)
