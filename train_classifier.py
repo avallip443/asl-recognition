@@ -1,11 +1,9 @@
 import pickle
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import StratifiedKFold, train_test_split
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.preprocessing import LabelEncoder
 import tensorflow as tf
 from tensorflow.keras import layers, models, Input
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from sklearn.model_selection import StratifiedKFold, train_test_split
 import numpy as np
 
 # load data
