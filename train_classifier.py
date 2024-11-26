@@ -1,6 +1,7 @@
 import pickle
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report
+from sklearn.preprocessing import LabelEncoder
 import tensorflow as tf
 from tensorflow.keras import layers, models, Input
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
@@ -20,6 +21,13 @@ data = data.reshape(data.shape[0], -1)
 
 # create training and test sets
 x_train, x_test, y_train, y_test = train_test_split(data, labels, test_size=0.2, shuffle=True, stratify=labels)
+
+label_encoder = LabelEncoder()
+y_train = label_encoder.fit_transform(y_train)
+y_test = label_encoder.fit_transform(y_test)
+
+print("Category Mapping:", dict(zip(y_train, y_train)))
+print("Category Mapping:", dict(zip(y_test, y_test)))
 
 print(x_train.shape, y_train.shape) 
 print(x_test.shape, y_test.shape)
