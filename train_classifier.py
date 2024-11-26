@@ -4,6 +4,7 @@ from sklearn.metrics import accuracy_score, classification_report
 import tensorflow as tf
 from tensorflow.keras import layers, models, Input
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from sklearn.model_selection import StratifiedKFold, train_test_split
 import numpy as np
 
 # load data
@@ -40,11 +41,38 @@ def create_model():
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
     return model
 
-# create instance of new model
-model = create_model()
+# 5-fold stratified cross-validation
+skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+fold_no = 1
+
+for train_index, val_index in skf.split(x_train, y_train):
+    print(f"Training fold {fold_no}...")
+    
+    # Split data for this fold
+    x_train_fold, x_val_fold = x_train[train_index], x_train[val_index]
+    y_train_fold, y_val_fold = y_train[train_index], y_train[val_index]
+    
+    # Create a new model instance
+    model = create_model()
+    
+    # Display model architecture
+    print(f"\nModel architecture for fold {fold_no}:")
+    model.summary()
+    
+    # Fit the model 
+    model.fit(
+        x_train_fold,
+        y_train_fold,
+        batch_size=64,
+        epochs=10,
+        validation_data=(x_val_fold, y_val_fold),
+        verbose=1
+    )
+    
+    fold_no += 1
 
 # train classifers
-history = model.fit(train_generator, validation_data=val_generator, epochs=5, verbose=1)
+# history = model.fit(train_generator, validation_data=val_generator, epochs=5, verbose=1)
 # model.fit(x_train, y_train, epochs=20)
 
 # create predictions
