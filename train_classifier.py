@@ -3,6 +3,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report
 import tensorflow as tf
 from tensorflow.keras import layers, models, Input
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import numpy as np
 
 # load data
@@ -19,10 +20,13 @@ data = data.reshape(data.shape[0], -1)
 # create training and test sets
 x_train, x_test, y_train, y_test = train_test_split(data, labels, test_size=0.2, shuffle=True, stratify=labels)
 
+print(x_train.shape, y_train.shape) 
+print(x_test.shape, y_test.shape)
+
 # define a CNN model architecture 
 def create_model():
     model = models.Sequential([
-        Input(shape=(1080, 620, 3)),
+        Input(shape=(42, 42, 3)),
         layers.Conv2D(32, (3, 3), activation='relu'),
         layers.MaxPooling2D((2, 2)),
         layers.Conv2D(64, (3, 3), activation='relu'),
@@ -40,7 +44,8 @@ def create_model():
 model = create_model()
 
 # train classifers
-model.fit(x_train, y_train)
+history = model.fit(train_generator, validation_data=val_generator, epochs=5, verbose=1)
+# model.fit(x_train, y_train, epochs=20)
 
 # create predictions
 y_predict = model.predict(x_test)
