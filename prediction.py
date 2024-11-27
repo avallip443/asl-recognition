@@ -15,7 +15,7 @@ warnings.filterwarnings("ignore", category=UserWarning, message="SymbolDatabase.
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 
 # Load svm model for asl prediction
-model_dict = pickle.load(open('./Asvm_model.p', 'rb'))
+model_dict = pickle.load(open('./model/svm_model.p', 'rb'))
 model = model_dict['model']
 
 # set up webcam
@@ -25,7 +25,7 @@ cap = cv2.VideoCapture(0)
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
-hands = mp_hands.Hands(static_image_mode=False, min_detection_confidence=0.7, max_coordsnum_hands=1)
+hands = mp_hands.Hands(static_image_mode=False, min_detection_confidence=0.7, max_num_hands=1)
 
 # dictionary mapping numeric predications to asl characters
 labels_dict = {
@@ -138,7 +138,7 @@ def run():
 
                 # draw predication on frame
                 cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
-                cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_coordsSIMPLEX, 1.3, (0, 0, 0), 3, cv2.LINE_AA)
+                cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3, cv2.LINE_AA)
 
                 # timer to check if predicated character is same for at least 1 second duration
                 current_time = time.time()
@@ -185,4 +185,3 @@ exit_button.pack()
 threading.Thread(target=run, daemon=True).start()
 
 root.mainloop()
-
