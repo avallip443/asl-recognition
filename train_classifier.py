@@ -4,91 +4,106 @@ from sklearn.metrics import accuracy_score, classification_report
 from sklearn.preprocessing import LabelEncoder
 import tensorflow as tf
 from tensorflow.keras import layers, models, Input
-from tensorflow.keras.utils import to_categorical
 import numpy as np
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.callbacks import EarlyStopping
 
 
-# Define a CNN model architecture
-def create_model_landmarks():
-    model = models.Sequential([
-        Input(shape=(21, 2)),  # Input shape for hand landmarks
-        layers.Flatten(),
-        layers.Dense(128, activation='relu'),
-        layers.Dense(64, activation='relu'),
-        layers.Dense(len(label_encoder.classes_), activation='softmax')  # Number of classes
-    ])
-    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-    return model
-
-
-# Load data
-data_dict = pickle.load(open('./kaggle_data.pickle', 'rb'))
+# load data
+data_dict = pickle.load(open('./new_data.pickle', 'rb'))
 data = np.asarray(data_dict['data'])
 labels = np.asarray(data_dict['labels'])
 
-# Normalize data
+# normalize data
 data = data / 255.0
-print('Data shape:', data.shape)
 
-# Create training and test sets
+# flatten the data 
+# data = data.reshape(data.shape[0], -1)
+
+# create training and test sets
 x_train, x_test, y_train, y_test = train_test_split(data, labels, test_size=0.2, shuffle=True, stratify=labels)
 
-# Prepare data
+# label encoding
 label_encoder = LabelEncoder()
 y_train = label_encoder.fit_transform(y_train)
 y_test = label_encoder.transform(y_test)
-y_train = to_categorical(y_train, num_classes=len(label_encoder.classes_))
-y_test = to_categorical(y_test, num_classes=len(label_encoder.classes_))
 
-print(f"Training data shape: {x_train.shape}")
-print(f"Training labels shape: {y_train.shape}")
+print(x_train.shape, y_train.shape) 
+print(x_test.shape, y_test.shape)
+
+# data augmentation
+datagen = ImageDataGenerator(
+    rotation_range=30,
+    width_shift_range=0.2,
+    height_shift_range=0.2,
+    shear_range=0.2,
+    zoom_range=0.2,
+    horizontal_flip=True,
+    fill_mode='nearest'
+)
+
+# define a CNN model architecture 
+def create_model(input_shape=(224, 224, 3), num_classes=len(np.unique(labels))):
+    model = models.Sequential([
+        Input(shape=input_shape),
+        layers.Conv2D(32, (3, 3), activation='relu'),
+        layers.MaxPooling2D((2, 2)),
+        layers.Conv2D(64, (3, 3), activation='relu'),
+        layers.MaxPooling2D((2, 2)),
+        layers.Conv2D(128, (3, 3), activation='relu'),
+        layers.MaxPooling2D((2, 2)),
+        layers.Conv2D(256, (3, 3), activation='relu'),
+        layers.MaxPooling2D((2, 2)),
+        layers.Conv2D(512, (3, 3), activation='relu'),
+        layers.MaxPooling2D((2, 2)),
+        layers.GlobalAveragePooling2D(),
+        layers.Dense(64, activation='relu'),
+        layers.Dense(num_classes, activation='softmax') 
+    ])
+    model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+    return model
+
+# create model
+model = create_model(input_shape=(224, 224, 3))
+
+# display model architecture
+model.summary()
+
+
+# EarlyStopping callback to avoid overfitting
+early_stopping = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
+
 
 # 5-fold stratified cross-validation
 skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 fold_no = 1
-all_accuracies = []
 
-for train_index, val_index in skf.split(x_train, label_encoder.inverse_transform(np.argmax(y_train, axis=1))):
+for train_index, val_index in skf.split(x_train, y_train):
     print(f"Training fold {fold_no}...")
     
-    # Split data for this fold
+    # split data for this fold
     x_train_fold, x_val_fold = x_train[train_index], x_train[val_index]
     y_train_fold, y_val_fold = y_train[train_index], y_train[val_index]
-    
-    # Create a new model instance
-    model = create_model_landmarks()
-    
-    # Display model architecture
-    print(f"\nModel architecture for fold {fold_no}:")
-    model.summary()
-    
-    # Train the model
-    history = model.fit(
-        x_train_fold,
-        y_train_fold,
-        batch_size=64,
+
+    # Train with data augmentation
+    model.fit(
+        datagen.flow(x_train_fold, y_train_fold, batch_size=64),
+        steps_per_epoch=len(x_train_fold) // 64,
         epochs=10,
         validation_data=(x_val_fold, y_val_fold),
+        callbacks=[early_stopping],
         verbose=1
     )
     
-    # Evaluate fold accuracy
-    val_accuracy = model.evaluate(x_val_fold, y_val_fold, verbose=0)[1]
-    print(f"Validation Accuracy for fold {fold_no}: {val_accuracy * 100:.2f}%")
-    all_accuracies.append(val_accuracy)
-    
     fold_no += 1
 
-# Cross-validation accuracy summary
-print(f"Cross-validation accuracies: {[acc * 100 for acc in all_accuracies]}")
-print(f"Mean Accuracy: {np.mean(all_accuracies) * 100:.2f}%")
+# create predictions
+y_predict = model.predict(x_test)
 
-# Create predictions
-y_predict = np.argmax(model.predict(x_test), axis=1)
-y_true = np.argmax(y_test, axis=1)
+# Ensure that predictions are classified properly
+y_predict = np.argmax(y_predict, axis=1)
 
-print(f"Test Accuracy: {accuracy_score(y_true, y_predict) * 100:.2f}%")
-print(classification_report(y_true, y_predict))
+print(f"Accuracy: {accuracy_score(y_test, y_predict) * 100:.2f}%")
+print(classification_report(y_test, y_predict))
 
-# Save model
-model.save('kaggle_model.h5')
+model.save('new_model.h5')
