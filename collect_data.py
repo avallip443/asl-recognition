@@ -12,6 +12,7 @@ DATASET_SIZE  = 300
 
 # set up webcam 
 cap = cv2.VideoCapture(0)  # change index if multiple cameras are connected
+
 # image dimensions are 224x224 pixels
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 224)  
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 224)   
@@ -63,13 +64,12 @@ for class_id in range(NUMBER_OF_CLASSES):
             print("Failed to capture image.")
             break
         
-        #cv2.putText(frame, f'Class {class_id} - Image {counter + 1}/{DATASET_SIZE}', (10, 30), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2)
         cv2.imshow('frame', frame)
         
         # save captured image
         file_path = os.path.join(class_dir, f'{counter}.jpg')
         
-        try:
+        try:  # save image to dataset
             cv2.imwrite(file_path, frame)
             print(f'Successfully saved: {file_path}')
             counter += 1
