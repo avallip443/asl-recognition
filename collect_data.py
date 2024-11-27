@@ -7,14 +7,14 @@ if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
 
 # number of classes (eg. A, B) and number of images per class
-NUMBER_OF_CLASSES = 3  
-DATASET_SIZE  = 500  
+NUMBER_OF_CLASSES = 26  
+DATASET_SIZE  = 300  
 
 # set up webcam 
 cap = cv2.VideoCapture(0)  # change index if multiple cameras are connected
-# image dimensions are 512x512 pixels
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 512)  
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 512)   
+# image dimensions are 224x224 pixels
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 224)  
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 224)   
 
 # check if webcam opened
 if not cap.isOpened():
@@ -42,8 +42,8 @@ for class_id in range(NUMBER_OF_CLASSES):
             break
 
         # frame = cv2.flip(frame, 1)  # flip camera        
-        cv2.putText(frame, f'Collecting Class {class_id}', (10, 50), cv2.FONT_HERSHEY_PLAIN, 3, (0, 255, 0), 2)
-        cv2.putText(frame, 'Press "1" to start or "q" to quit', (10, 90), cv2.FONT_HERSHEY_PLAIN, 2, (255, 0, 0), 2)
+        cv2.putText(frame, f'Collecting Class {class_id}', (5, 30), cv2.FONT_HERSHEY_PLAIN, 1.5, (0, 255, 0), 1)
+        cv2.putText(frame, 'Press "1" to start or "q" to quit', (5, 50), cv2.FONT_HERSHEY_PLAIN, 1, (255, 0, 0), 1)
         cv2.imshow('frame', frame)
         
         key = cv2.waitKey(25)  # 25 millisecond delay
@@ -63,7 +63,7 @@ for class_id in range(NUMBER_OF_CLASSES):
             print("Failed to capture image.")
             break
         
-        cv2.putText(frame, f'Class {class_id} - Image {counter + 1}/{DATASET_SIZE}', (10, 30), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2)
+        #cv2.putText(frame, f'Class {class_id} - Image {counter + 1}/{DATASET_SIZE}', (10, 30), cv2.FONT_HERSHEY_PLAIN, 2, (0, 255, 0), 2)
         cv2.imshow('frame', frame)
         
         # save captured image
