@@ -5,74 +5,53 @@ from sklearn.preprocessing import LabelEncoder
 import tensorflow as tf
 from tensorflow.keras import layers, models, Input
 import numpy as np
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.callbacks import EarlyStopping
 
 
 # load data
 data_dict = pickle.load(open('./new_data.pickle', 'rb'))
-data = np.asarray(data_dict['data'])
-labels = np.asarray(data_dict['labels'])
+data = np.asarray(data_dict['data'])  # shape: (samples, 21, 2)
+labels = np.asarray(data_dict['labels'])  # shape: (samples,)
 
-# normalize data
+# normalize data to [0, 1] range
 data = data / 255.0
 
-# flatten the data 
-# data = data.reshape(data.shape[0], -1)
-
 # create training and test sets
-x_train, x_test, y_train, y_test = train_test_split(data, labels, test_size=0.2, shuffle=True, stratify=labels)
+x_train, x_test, y_train, y_test = train_test_split(
+    data, labels, test_size=0.2, shuffle=True, stratify=labels
+)
 
-# label encoding
+# Label encoding for class labels
 label_encoder = LabelEncoder()
 y_train = label_encoder.fit_transform(y_train)
 y_test = label_encoder.transform(y_test)
 
-print(x_train.shape, y_train.shape) 
-print(x_test.shape, y_test.shape)
+# Print shapes for debugging
+print(f"x_train: {x_train.shape}, y_train: {y_train.shape}")
+print(f"x_test: {x_test.shape}, y_test: {y_test.shape}")
 
-# data augmentation
-datagen = ImageDataGenerator(
-    rotation_range=30,
-    width_shift_range=0.2,
-    height_shift_range=0.2,
-    shear_range=0.2,
-    zoom_range=0.2,
-    horizontal_flip=True,
-    fill_mode='nearest'
-)
-
-# define a CNN model architecture 
-def create_model(input_shape=(224, 224, 3), num_classes=len(np.unique(labels))):
+# Define MLP model architecture
+def create_mlp(input_shape=(21, 2), num_classes=len(np.unique(labels))):
     model = models.Sequential([
-        Input(shape=input_shape),
-        layers.Conv2D(32, (3, 3), activation='relu'),
-        layers.MaxPooling2D((2, 2)),
-        layers.Conv2D(64, (3, 3), activation='relu'),
-        layers.MaxPooling2D((2, 2)),
-        layers.Conv2D(128, (3, 3), activation='relu'),
-        layers.MaxPooling2D((2, 2)),
-        layers.Conv2D(256, (3, 3), activation='relu'),
-        layers.MaxPooling2D((2, 2)),
-        layers.Conv2D(512, (3, 3), activation='relu'),
-        layers.MaxPooling2D((2, 2)),
-        layers.GlobalAveragePooling2D(),
+        Input(shape=input_shape),  # Input shape: (21, 2)
+        layers.Flatten(),  # Flatten into 1D vector
+        layers.Dense(128, activation='relu'),
+        layers.Dropout(0.3),  # Dropout for regularization
         layers.Dense(64, activation='relu'),
-        layers.Dense(num_classes, activation='softmax') 
+        layers.Dropout(0.3),
+        layers.Dense(num_classes, activation='softmax')  # Output layer
     ])
     model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
     return model
 
-# create model
-model = create_model(input_shape=(224, 224, 3))
+# Create MLP model
+model = create_mlp(input_shape=(21, 2))
 
-# display model architecture
+# Display model architecture
 model.summary()
-
 
 # EarlyStopping callback to avoid overfitting
 early_stopping = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
-
 
 # 5-fold stratified cross-validation
 skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
@@ -81,29 +60,29 @@ fold_no = 1
 for train_index, val_index in skf.split(x_train, y_train):
     print(f"Training fold {fold_no}...")
     
-    # split data for this fold
+    # Split data for this fold
     x_train_fold, x_val_fold = x_train[train_index], x_train[val_index]
     y_train_fold, y_val_fold = y_train[train_index], y_train[val_index]
 
-    # Train with data augmentation
+    # Train the MLP model
     model.fit(
-        datagen.flow(x_train_fold, y_train_fold, batch_size=64),
-        steps_per_epoch=len(x_train_fold) // 64,
+        x_train_fold, y_train_fold,
+        batch_size=64,
         epochs=10,
         validation_data=(x_val_fold, y_val_fold),
         callbacks=[early_stopping],
         verbose=1
     )
-    
+
     fold_no += 1
 
-# create predictions
+# Create predictions on the test set
 y_predict = model.predict(x_test)
+y_predict = np.argmax(y_predict, axis=1)  # Convert probabilities to class indices
 
-# Ensure that predictions are classified properly
-y_predict = np.argmax(y_predict, axis=1)
-
+# Evaluate model performance
 print(f"Accuracy: {accuracy_score(y_test, y_predict) * 100:.2f}%")
 print(classification_report(y_test, y_predict))
 
+# Save the trained model
 model.save('new_model.h5')

@@ -5,6 +5,8 @@ import mediapipe as mp
 import matplotlib.pyplot as plt
 import numpy as np
 
+print(cv2.__version__)
+
 
 # access dataset
 DATA_DIR = './new_data'
