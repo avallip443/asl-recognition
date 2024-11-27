@@ -4,11 +4,11 @@ import cv2
 import mediapipe as mp 
 import matplotlib.pyplot as plt
 
+# access kaggle dataset
+DATA_DIR = './extracted_folder/asl_alphabet_train/asl_alphabet_train'
+OUTPUT_FILE = 'kaggle_data.pickle'
 
-DATA_DIR = './data'
-OUTPUT_FILE = 'data.pickle'
-
-# initalize mediapipe modules
+# initialize mediapipe modules
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -27,21 +27,22 @@ def create_dataset(data_dir, output_file):
     if not os.path.exists(data_dir):
         raise FileNotFoundError(f"Data directory '{data_dir}' does not exist.")
     
-    # initialize data, label lists
+    # dnitialize data, label lists
     data = []
     labels = []
     
     plt.ion() # turn on interactive mode for visualization
     
-    # iterate through class directories
-    class_directories = os.listdir(DATA_DIR)
+    # iterate through class directories (letters A to Z)
+    class_directories = os.listdir(data_dir)
     if not class_directories:
         raise ValueError(f"No class directories found in '{data_dir}'.")
+    
     
     print("Creating dataset...")
     
     for class_dir in class_directories:
-        class_path = os.path.join(DATA_DIR, class_dir)
+        class_path = os.path.join(data_dir, class_dir)
         if not os.path.isdir(class_path):
             print(f"Skipping file: {class_dir}")
             continue 
@@ -56,7 +57,7 @@ def create_dataset(data_dir, output_file):
             try:
                 data_points, label, shape = process_image(image_path, class_dir)
 
-                if len(data_points) == 21:  # mediapipe returns 21 points, each with (x, y)
+                if len(data_points) == 21:  # Mediapipe returns 21 points, each with (x, y)
                     data.append(data_points)
                     labels.append(label)
                 else:
@@ -67,7 +68,7 @@ def create_dataset(data_dir, output_file):
                 print(f"Error processing {image_file}: {e}")
 
     save_dataset(output_file, data, labels)
-    plt.ioff()  # turn off interactive mode
+    plt.ioff()  # Turn off interactive mode
     print(f"Dataset saved to {output_file}")
 
 
@@ -107,6 +108,7 @@ def process_image(image_path, class_label):
 def save_dataset(output_file, dataset, labels):
     """
     Save dataset to a pickle file.
+    
     Args:
         output_file (str): File path to save the dataset.
         dataset (list): List of data points from images.

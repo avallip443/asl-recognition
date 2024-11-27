@@ -2,7 +2,7 @@ import os
 import cv2
 
 # directory to save the dataset
-DATA_DIR = './data'
+DATA_DIR = './new_data'
 if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
 
@@ -11,9 +11,10 @@ NUMBER_OF_CLASSES = 3
 DATASET_SIZE  = 500  
 
 # set up webcam 
-cap = cv2.VideoCapture(0)  # change index if nultiple cameras are connected
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1080)  
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 620)   
+cap = cv2.VideoCapture(0)  # change index if multiple cameras are connected
+# image dimensions are 512x512 pixels
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 512)  
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 512)   
 
 # check if webcam opened
 if not cap.isOpened():
