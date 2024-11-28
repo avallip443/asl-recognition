@@ -2,7 +2,7 @@ import os
 import cv2
 
 # directory to save the dataset
-DATA_DIR = './new_data'
+DATA_DIR = './sign_images'
 if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
 

@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 
 
 # access dataset
-DATA_DIR = './new_data'
-OUTPUT_FILE = 'new_data.pickle'
+DATA_DIR = './sign_images'
+OUTPUT_FILE = 'data.pickle'
 
 # initialize mediapipe modules
 mp_hands = mp.solutions.hands
