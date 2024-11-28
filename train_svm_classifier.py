@@ -12,8 +12,8 @@ labels = np.asarray(data_dict['labels'])
 # split the data into training and testing sets
 x_train, x_test, y_train, y_test = train_test_split(data, labels, test_size=0.2, shuffle=True, stratify=labels)
 
-# initialize the SVM model with RBF kernel
-model = SVC(kernel='rbf')
+# initialize the SVM model with RBF kernel and probablity enabled
+model = SVC(kernel='rbf', probability=True)
 
 # train the model
 model.fit(x_train, y_train)
