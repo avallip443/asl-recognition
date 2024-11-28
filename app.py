@@ -3,10 +3,10 @@ import mediapipe as mp
 import numpy as np
 import pickle
 import socket
-from prediction_no_ui import generate
+from prediction import generate
 from flask import Flask, render_template, Response, send_file
 import os
-from prediction_no_ui import cap
+from prediction import cap
 
 # Initialize Flask app
 app = Flask(__name__, static_url_path='/static', static_folder='static')
