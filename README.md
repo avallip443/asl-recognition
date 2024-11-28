@@ -37,10 +37,22 @@ source venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
-5. Run the script
+5. Run the script OR
 ```bash
 python collect_data.py
 ```
+
+6. Start the UI
+```bash
+python app.py
+```
+6. Navigate to address on browser 
+
+    Look for
+    ```bash 
+    Running on http://127.0.0.XXXXX 
+    ```
+    in terminal and navigate to that link on your browser
 
 ### Image Collection Process
 Once the script is running, it will prompt you to press keys to start collecting image data for each gesture (class). The data is captured via your webcamera.
@@ -67,6 +79,7 @@ python create_dataset.py
 
 ## Dependencies
 The following libraries are required to run the project:
+- `flask`
 - `mediapipe`
 - `matplotlib`
 - `numpy`
@@ -79,5 +92,5 @@ The following libraries are required to run the project:
 Install the required libraries with the following command:
 
 ```bash
-pip install opencv-python mediapipe matplotlib numpy scikit-learn
+pip install flask opencv-python mediapipe matplotlib numpy scikit-learn
 ```

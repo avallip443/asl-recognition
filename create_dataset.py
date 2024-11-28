@@ -5,13 +5,13 @@ import mediapipe as mp
 import matplotlib.pyplot as plt
 
 
-DATA_DIR = './data'
-OUTPUT_FILE = 'data.pickle'
+# access dataset
+DATA_DIR = './new_data'
+OUTPUT_FILE = 'new_data.pickle'
 
-# initalize mediapipe modules
+# initialize mediapipe modules
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
-mp_drawing_styles = mp.solutions.drawing_styles
 hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
 
 
@@ -27,23 +27,24 @@ def create_dataset(data_dir, output_file):
     if not os.path.exists(data_dir):
         raise FileNotFoundError(f"Data directory '{data_dir}' does not exist.")
     
-    # initialize data, label lists
+    # dnitialize data, label lists
     data = []
     labels = []
     
     plt.ion() # turn on interactive mode for visualization
     
-    # iterate through class directories
-    class_directories = os.listdir(DATA_DIR)
+    # iterate through class directories (letters A to Z)
+    class_directories = os.listdir(data_dir)
     if not class_directories:
         raise ValueError(f"No class directories found in '{data_dir}'.")
     
     print("Creating dataset...")
     
+    # loop through directories and process images
     for class_dir in class_directories:
-        class_path = os.path.join(DATA_DIR, class_dir)
+        class_path = os.path.join(data_dir, class_dir)
         if not os.path.isdir(class_path):
-            print(f"Skipping file: {class_dir}")
+            print(f"Skipping non-directory: {class_dir}")
             continue 
         
         print(f"Processing class directory: {class_dir}")
@@ -54,15 +55,7 @@ def create_dataset(data_dir, output_file):
             image_path = os.path.join(class_path, image_file)
 
             try:
-                data_points, label, shape = process_image(image_path, class_dir)
-
-                if len(data_points) == 21:  # mediapipe returns 21 points, each with (x, y)
-                    data.append(data_points)
-                    labels.append(label)
-                else:
-                    print(f"Skipping image due to incomplete landmarks: {image_file}")
-                    print(f"Incomplete landmarks in {image_file}: Dimensions {shape} Length {len(data_points)}")
-
+                process_image(image_path, class_dir, data, labels)
             except Exception as e:
                 print(f"Error processing {image_file}: {e}")
 
@@ -71,15 +64,15 @@ def create_dataset(data_dir, output_file):
     print(f"Dataset saved to {output_file}")
 
 
-def process_image(image_path, class_label):
+def process_image(image_path, class_label, data, labels):
     """
     Process image to get hand landmarks and return data points and label.
     
     Args:
         image_path (str): Path to the image.
         class_label (str): Label of the image class.
-    Returns:
-        tuple: Tuple containing the data points and class label.
+        data (list): List to store extracted data points (landmark coordinates).
+        labels (list): List to store corresponding labels for data points.
     """
     print(f"Processing image: {image_path}")
     
@@ -87,8 +80,12 @@ def process_image(image_path, class_label):
     if img is None:
         raise ValueError(f"Failed to load image from {image_path}")
     
+    # resize image 
+    #img = cv2.resize(img, (224, 224))
+    
     # convert image to rgb
     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    
     results = hands.process(img_rgb) 
         
     # get hand landmark data
@@ -98,15 +95,18 @@ def process_image(image_path, class_label):
             x_points = [landmark.x for landmark in hand_landmarks.landmark]
             y_points = [landmark.y for landmark in hand_landmarks.landmark]
             data_points.extend(zip(x_points, y_points))
-    else:
-        print(f"No hand landmarks detected in {image_path}")
     
-    return data_points, class_label, img.shape
+    if len(data_points) == 21:  # 21 landmarks, each with (x, y)
+        data.append(data_points)
+        labels.append(class_label)
+    else:
+        print(f"Skipping image due to incomplete landmarks: {image_path}")
 
 
 def save_dataset(output_file, dataset, labels):
     """
     Save dataset to a pickle file.
+    
     Args:
         output_file (str): File path to save the dataset.
         dataset (list): List of data points from images.
@@ -122,3 +122,4 @@ if __name__ == "__main__":
         create_dataset(DATA_DIR, OUTPUT_FILE)
     except Exception as e:
         print(f"Error occurred: {e}")
+        
