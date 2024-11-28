@@ -5,9 +5,11 @@ import matplotlib.pyplot as plt
 
 print("Visualizing images...")
 
-DATA_DIR = './new_data'
+# directory of images to display landmarks
+DATA_DIR = './sign_iamges'
 print(f"Checking DATA_DIR at: {os.path.abspath(DATA_DIR)}")
 
+# initialize mediapipe modules
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -64,4 +66,3 @@ else:
                 
     plt.show()  
     plt.ioff() 
-                        
