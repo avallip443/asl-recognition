@@ -3,7 +3,6 @@ import pickle
 import cv2
 import mediapipe as mp 
 import matplotlib.pyplot as plt
-import numpy as np
 
 
 # access dataset
@@ -123,3 +122,4 @@ if __name__ == "__main__":
         create_dataset(DATA_DIR, OUTPUT_FILE)
     except Exception as e:
         print(f"Error occurred: {e}")
+        
