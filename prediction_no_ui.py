@@ -45,7 +45,7 @@ fixed_character = ""
 delayCounter = 0
 start_time = time.time()
 
-def run():
+def generate():
     """
     Captures video, detects hand landmarks, predicts ASL characters, and displays them on the video.
     """
@@ -117,16 +117,20 @@ def run():
                     last_detected_character = predicted_character
                     delayCounter = 0
 
-        # Show video with prediction
-        cv2.imshow('ASL Detection', frame)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+         # Encode the frame as JPEG
+        ret, jpeg = cv2.imencode('.jpg', frame)
+        if not ret:
+            print("Failed to encode frame.")
+            continue
 
-    cap.release()
-    cv2.destroyAllWindows()
+        # Yield the frame as part of the MJPEG stream
+        frame = jpeg.tobytes()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
 
 if __name__ == "__main__":
     try:
-        run()
+        generate()
     except Exception as e:
         logging.error(f"Error occurred: {e}")
