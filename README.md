@@ -11,28 +11,12 @@ This project is an ASL (American Sign Language) recognition system that processe
 - [Installation](#installation)
 - [Dependencies](#dependencies)
 
+
 ## Training Model
+This section describes collecting data, extracting meaningingful features, and using these to train a support vector machine (SVM) model capable of making reliable ASL sign predictions. 
 
-### Data Collection
-
-
-### Dataset Creation
-
-
-### Training SVM Model
-
-
-## Installation
-
-
-## Dependencies
-
-
-## Data Collection
-The script `collect_data.py` collect images from a webcam to create a dataset for ASL gestures (classes). Here's how it works:
-
-### Set Up 
-Before running the script, it is recommended to use a virtual environment.
+## Set Up
+Before running the scripts for training the model, it is recommended to use a virtual environment.
 
 1. Install `virtualenv ` (if not already installed)
 ```bash
@@ -55,10 +39,42 @@ source venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
-5. Run the script OR
+
+
+### Data Collection
+The script `collect_data.py` collects and organizes images required to train the model. Using a webcam, it takes 300 images of 244x244 pixels for each ASL gesture and saves them in labeled directories corresponding to their gestures. For example, images for the first gesture ('A') would be stored in `./sign_images/0`. 
+
+#### Steps in Data Collection
+1. Launch the script by entering:
 ```bash
 python collect_data.py
 ```
+2. Press '1' to start capturing images for a gesture.
+3. Press 'q' t quit the program.
+
+
+### Dataset Creation
+The script `create_dataset.py` processes the captured images into meaningful features for training the model. Using the `Mediapipe` library, it extracts hand landmarks (the x and y coordinates of 21 points on the hand) from each image to be used as input data for the SVM model. Each gesture is assigned a unique numberic label corresponding to its directoriy (eg. 'A' = 0, 'B' = 1).
+
+#### Steps in Dataset Creation
+1. Launch the script by entering:
+```bash
+python create_dataset.py
+```
+2. Upon completion, an output file called `data.pickle' will be creating containing the processed dataset.
+
+
+### Training SVM Model
+
+
+## Installation
+
+
+## Dependencies
+
+
+## Data Collection
+
 
 6. Start the UI
 ```bash
@@ -71,16 +87,8 @@ python app.py
     Running on http://127.0.0.XXXXX 
     ```
     in terminal and navigate to that link on your browser
-
-### Image Collection Process
-Once the script is running, it will prompt you to press keys to start collecting image data for each gesture (class). The data is captured via your webcamera.
-- Each image set will be stored in the appropriate subdirectory in the `./data` directory (e.g. `./data/0` for class 0).
-- Images collected are specified by the total number of classes (`NUMBER_OF_CLASSES`) and the number of images per class (`DATASET_SIZE`).
-- The webcam feed will display instructions. Press "1" to start collecting images for the current class or "q" to quit.
-
-
+   
 ## Dataset Creation
-The script `create_dataset.py` processes the image sets to create a dataset of hand landmarks for training ASL gesture recognition models. It uses `Mediapipe` to detect hand landmarks from image and saves the extracted data and its corresponding labels to a `.pickle` file.
 
 ### Set up
 It is assumed that the virtual environment has been set up and the images are in the `./data` directory before running the script.
