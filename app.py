@@ -7,6 +7,7 @@ from prediction import generate
 from flask import Flask, render_template, Response, send_file
 import os
 from prediction import cap
+import webbrowser
 
 # Initialize Flask app
 app = Flask(__name__, static_url_path='/static', static_folder='static')
@@ -33,6 +34,11 @@ def video_feed():
 if __name__ == '__main__':
     try:
         port = get_free_port()
+               # URL to open
+        url = "http://127.0.0.1:"+ str(port)
+        webbrowser.open(url)
+        # Open the URL in the default web browser
+        app.run(debug=True, host='0.0.0.0', port=port, use_reloader = False)
         app.run(debug=True, host='0.0.0.0', port=port)
     finally:
         # Ensure camera release at server shutdown
