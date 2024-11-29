@@ -5,9 +5,11 @@ This project is an ASL (American Sign Language) recognition system that processe
 
 ## Table of Contents
 - [Training Model](#training-model)
+    - [Data Collection](#data-collection)
+    - [Dataset Creation](#dataset-creation)
+    - [Training SVM Model](#training-svm-model)
 - [Installation](#installation)
 - [Dependencies](#dependencies)
-
 
 ## Training Model
 
