@@ -1,7 +1,7 @@
 # ASL Recognition System
 
 ## Description
-This project implements an ASL recognition system using computer vision and machine learning. It processes hand landmarks detected by Mediapipe and trains a model to recognize gestures.
+This project is an ASL (American Sign Language) recognition system that processes live video input to identify and display ASL signs in real time. Using computer vision and machine learning, the program accurately recognizes all 26 letter gestures and provides real=time predictions. 
 
 ## Table of Contents
 - [Data Collection](#data-collection)
