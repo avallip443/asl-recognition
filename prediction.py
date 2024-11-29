@@ -6,6 +6,7 @@ import time
 import logging
 import warnings
 
+fixed_character = ""
 # suppress specific warnings
 warnings.filterwarnings("ignore", category=UserWarning, message="SymbolDatabase.GetPrototype() is deprecated")
 
@@ -44,6 +45,9 @@ last_detected_character = None
 fixed_character = ""
 delayCounter = 0
 start_time = time.time()
+
+def get_character():
+    return str(fixed_character)
 
 def generate():
     """
