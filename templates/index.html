@@ -31,7 +31,7 @@
         }
         .video-card {
             width: 100%;
-            max-width: 800px; /* Make video feed larger */
+            max-width: 700px; /* Make video feed larger */
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -79,6 +79,38 @@
         footer a:hover {
             text-decoration: underline;
         }
+
+        /* Styling for the text input and clear button */
+        .input-container {
+            position: fixed;
+            bottom: 55px; /* Above the footer */
+            width: 80%;
+            display: flex;
+            justify-content: center;
+            padding: 8px;
+            background-color: #ffffff;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .input-container input {
+            width: 80%;
+            padding: 10px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            border: 2px solid #0d6efd;
+        }
+        .input-container button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .input-container button:hover {
+            background-color: #0b5ed7;
+        }
     </style>
 </head>
 <body>
@@ -110,6 +142,12 @@
         </div>
     </div>
 
+     <!-- Textbox and Clear Button -->
+     <div class="input-container">
+        <input type="text" id="aslText" placeholder="Converted ASL text will appear here...">
+        <button id = "clearButton" >Clear</button>
+    </div>
+
     <footer>
         <p>&copy; 2024 Hand Gesture App | Built with ❤️ using Flask. Visit our 
             <a href="https://github.com/" target="_blank">GitHub</a>
@@ -117,5 +155,45 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Clear the text box
+        function clearText() {
+            document.getElementById('aslText').value = '';
+        }
+
+       // Function to fetch new dynamic data from the Python server
+        function fetchDynamicData() {
+            fetch('/get_dynamic_data')  // Make an AJAX call to the Flask endpoint
+                .then(response => response.json())  // Parse the JSON response
+                .then(data => {
+                    // Update the text box with the new dynamic text from the server
+                    document.getElementById('aslText').value = data.dynamic_text;
+                })
+                .catch(error => {
+                    console.error('Error fetching dynamic data:', error);
+                });
+        }
+
+        // Automatically call fetchDynamicData every 2 seconds
+        window.onload = function() {
+            setInterval(fetchDynamicData, 1000);  // Fetch data every 2 seconds
+        };
+
+        // Event listener for the "Clear Text" button to clear both the text box and the server data
+        document.getElementById('clearButton').addEventListener('click', function() {
+            // Clear the text box content
+            document.getElementById('aslText').value = '';
+
+            // Send a request to the server to clear the data
+            fetch('/clear_dynamic_data')
+                .then(response => response.json())
+                .catch(error => {
+                    console.error('Error clearing dynamic data:', error);
+                });
+        });
+
+         
+    </script>
 </body>
 </html>
