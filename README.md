@@ -18,15 +18,15 @@ This section describes collecting data, extracting meaningingful features, and u
 ### Set Up
 Before running the scripts for training the model, it is recommended to use a virtual environment.
 
-1. Install `virtualenv ` (if not already installed)
+1. Install `virtualenv ` (if not already installed):
 ```bash
 pip install virtualenv
 ```
-2. Create a virtual environment
+2. Create a virtual environment:
 ```bash
 python -m venv venv
 ```
-3. Active the virtual environment
+3. Active the virtual environment:
 - Windows:
 ```bash
 .\venv\Scripts\activate
@@ -35,9 +35,9 @@ python -m venv venv
 ```bash
 source venv/bin/activate
 ```
-4. Install project dependencies
+4. Install project dependencies:
 ```bash
-pip install -r requirements.txt
+pip install -r model-requirements.txt
 ```
 
 
@@ -75,27 +75,30 @@ ptyhon train_svm_classifier.py
 2. The script splits the datase into training and testing sets to evaluate model performance. 
 3. Upon completion, an output file called `svm_model.p` will be creating containing the trained SVM model.
 
+
 ## Installation
+To run the ASL recognition system, follow these steps to set up your environment and start the application.
 
-
-## Dependencies
-
-
-## Data Collection
-
-
-6. Start the UI
+1. Clone the repository to your local machine:
+```bash
+git clone https://github.com/avallip443/asl-recognition.git
+```
+2. Create a virtual environment:
+```bash
+python3 -m venv venv
+venv\Scripts\activate    # On macOS/Linux use: source venv/bin/activate 
+```
+3. Install requirements (skip this step if `model-requirements.txt` was executed):
+```bash
+pip install -r requirements.txt
+```
+4. Run the application:
 ```bash
 python app.py
 ```
-6. Navigate to address on browser 
+5. Navigate to the local URL. For example, the URL may be: `http://127.0.0.1:23456`
 
-    Look for
-    ```bash 
-    Running on http://127.0.0.XXXXX 
-    ```
-    in terminal and navigate to that link on your browser
-  
+
 ## Dependencies
 The following libraries are required to run the project:
 - `flask`
