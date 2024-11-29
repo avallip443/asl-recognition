@@ -15,7 +15,7 @@ This project is an ASL (American Sign Language) recognition system that processe
 ## Training Model
 This section describes collecting data, extracting meaningingful features, and using these to train a support vector machine (SVM) model capable of making reliable ASL sign predictions. 
 
-## Set Up
+### Set Up
 Before running the scripts for training the model, it is recommended to use a virtual environment.
 
 1. Install `virtualenv ` (if not already installed)
