@@ -65,7 +65,15 @@ python create_dataset.py
 
 
 ### Training SVM Model
+The script `train_svm_classifier.py` trains an SVM (Support Vector Machine) model to classify ASL gestures. It uses the processed dataset to associate the extracted hand landmarks with their corresponding ASL labels so the model can recognize and predict gestures. The trained model can then be used in the real-time ASL recognition system.
 
+#### Steps in Model Training
+1. Launch the scripting by entering:
+```bash
+ptyhon train_svm_classifier.py
+```
+2. The script splits the datase into training and testing sets to evaluate model performance. 
+3. Upon completion, an output file called `svm_model.p` will be creating containing the trained SVM model.
 
 ## Installation
 
@@ -87,22 +95,7 @@ python app.py
     Running on http://127.0.0.XXXXX 
     ```
     in terminal and navigate to that link on your browser
-   
-## Dataset Creation
-
-### Set up
-It is assumed that the virtual environment has been set up and the images are in the `./data` directory before running the script.
-
-1. Run the script
-```bash
-python create_dataset.py
-```
-2. Output
-- The processed dataset will be saves as `.pickle` in the rot directory.
-
-### Important Notes
-- Ensure that the images in the `./data` directory are of good quality and contain visible hands for best results.
-
+  
 ## Dependencies
 The following libraries are required to run the project:
 - `flask`
