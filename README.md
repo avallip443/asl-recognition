@@ -4,12 +4,12 @@
 This project is an ASL (American Sign Language) recognition system that processes live video input to identify and display ASL signs in real time. Using computer vision and machine learning, the program accurately recognizes all 26 letter gestures and provides real=time predictions. 
 
 ## Table of Contents
-- [Training Model](#training-model)
+1. [Training Model](#training-model)
     - [Data Collection](#data-collection)
     - [Dataset Creation](#dataset-creation)
     - [Training SVM Model](#training-svm-model)
-- [Installation](#installation)
-- [Dependencies](#dependencies)
+2. [Installation](#installation)
+3. [Dependencies](#dependencies)
 
 
 ## Training Model
