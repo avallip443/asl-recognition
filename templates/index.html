@@ -146,7 +146,6 @@
      <div class="input-container">
         <input type="text" id="aslText" placeholder="Converted ASL text will appear here...">
         <button id = "clearButton" >Clear</button>
-        <button id="quitButton">Quit Server</button>
     </div>
 
     <footer>
@@ -194,15 +193,7 @@
                 });
         });
 
-          // JavaScript to handle the button click event
-          document.getElementById("quitButton").addEventListener("click", function() {
-            fetch("/quit")
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data.message);  // You can log the response
-                    alert("Server is shutting down...");  // Notify the user
-                });
-        });
+         
     </script>
 </body>
 </html>

@@ -20,14 +20,6 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.jinja_env.globals['__name__'] = '__main__'  # Disable template caching
 app.jinja_env.cache = {}
 
-@app.route('/quit', methods=['POST'])
-def quit():
-    """Gracefully stop the Flask server"""
-    print("Shutting down the server...")
-    os.kill(os.getpid(), signal.SIGINT)  # Gracefully stop the server using SIGINT (Ctrl+C)
-    return jsonify({"message": "Server is shutting down..."})
-
-
 @app.route('/')
 def index():
     print("Rendering index.html")
