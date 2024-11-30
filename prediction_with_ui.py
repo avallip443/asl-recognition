@@ -15,7 +15,7 @@ warnings.filterwarnings("ignore", category=UserWarning, message="SymbolDatabase.
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 
 # Load svm model for asl prediction
-model_dict = pickle.load(open('testsvm_model.p', 'rb'))
+model_dict = pickle.load(open('./model/svm_model.p', 'rb'))
 model = model_dict['model']
 
 # set up webcam
@@ -128,19 +128,13 @@ def run():
                 x2 = int(max(x_coords) * W) - 10
                 y2 = int(max(y_coords) * H) - 10
                 
-                
+                # make predication using model
+                prediction = model.predict([np.asarray(data_aux)])
+                predicted_character = labels_dict[int(prediction[0])]
 
-               # Get probability estimates for each class
-                probabilities = model.predict_proba([np.asarray(data_aux)])[0]  # Predict probabilities
-
-                # Find the predicted class and its confidence score
-                predicted_class_index = np.argmax(probabilities)  # Index of the highest probability
-                predicted_character = labels_dict[predicted_class_index]  # Map index to character
-                confidence_score = probabilities[predicted_class_index]  # Highest probability
-
-                # Display prediction and confidence score on the video feed
-                cv2.putText(frame, f"{predicted_character} ({confidence_score:.2f})", 
-                            (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3, cv2.LINE_AA)
+                # draw predication on frame
+                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
+                cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3, cv2.LINE_AA)
 
                 # timer to check if predicated character is same for at least 1 second duration
                 current_time = time.time()
