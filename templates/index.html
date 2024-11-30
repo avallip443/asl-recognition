@@ -31,7 +31,7 @@
         }
         .video-card {
             width: 100%;
-            max-width: 700px; /* Make video feed larger */
+            max-width: 700px; 
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -39,7 +39,7 @@
         }
         .static-card {
             width: 100%;
-            max-width: 400px; /* Make image smaller */
+            max-width: 400px; 
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -83,7 +83,7 @@
         /* Styling for the text input and clear button */
         .input-container {
             position: fixed;
-            bottom: 55px; /* Above the footer */
+            bottom: 55px;
             width: 80%;
             display: flex;
             justify-content: center;
@@ -175,9 +175,9 @@
                 });
         }
 
-        // Automatically call fetchDynamicData every 2 seconds
+        // Automatically call fetchDynamicData every second
         window.onload = function() {
-            setInterval(fetchDynamicData, 1000);  // Fetch data every 2 seconds
+            setInterval(fetchDynamicData, 1000);  // Fetch data every second
         };
 
         // Event listener for the "Clear Text" button to clear both the text box and the server data
