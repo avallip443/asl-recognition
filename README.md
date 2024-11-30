@@ -62,6 +62,7 @@ The script `create_dataset.py` processes the captured images into meaningful fea
 python create_dataset.py
 ```
 2. Upon completion, an output file called `data.pickle' will be creating containing the processed dataset.
+3. To manually verify if landmarks were detected correctly, run `display_landmarks.py`. It will display the first image of each gesture's image set with the detected landmarks.
 
 
 ### Training SVM Model
