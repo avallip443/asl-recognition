@@ -2,12 +2,10 @@ import cv2
 import socket
 from prediction import generate
 from flask import Flask, render_template, Response,jsonify
-import os
 from prediction import cap,get_character
 import webbrowser
 import logging
 import time
-import signal
 
 dynamic_data = ""
 updated_stream=""

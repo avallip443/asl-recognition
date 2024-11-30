@@ -96,7 +96,7 @@ pip install -r requirements.txt
 ```bash
 python app.py
 ```
-5. Navigate to the local URL. For example, the URL may be: `http://127.0.0.1:23456`
+5. A browser should automatically navigate to the URL but in the case that it doesn't, navigate to the local URL. For example, the URL may be: `http://127.0.0.1:23456` (can be found in terminal)
 
 
 ## Dependencies
