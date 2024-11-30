@@ -1,7 +1,7 @@
 # ASL Recognition System
 
 ## Description
-This project is an ASL (American Sign Language) recognition system that processes live video input to identify and display ASL signs in real time. Using computer vision and machine learning, the program accurately recognizes all 26 letter gestures and provides real=time predictions. 
+This project is an ASL (American Sign Language) recognition system that processes live video input to identify and display ASL signs in real time. Using computer vision and machine learning, the program accurately recognizes all 26 letter gestures and provides real-time predictions. 
 
 ## Table of Contents
 1. [Training Model](#training-model)
@@ -13,7 +13,7 @@ This project is an ASL (American Sign Language) recognition system that processe
 
 
 ## Training Model
-This section describes collecting data, extracting meaningingful features, and using these to train a support vector machine (SVM) model capable of making reliable ASL sign predictions. 
+This section describes collecting data, extracting meaningful features, and using these to train a support vector machine (SVM) model capable of making reliable ASL sign predictions. 
 
 ### Prerequisites
 Before running the scripts for training the model, it is recommended to use a virtual environment.
@@ -54,7 +54,7 @@ python collect_data.py
 
 
 ### Dataset Creation
-The script `create_dataset.py` processes the captured images into meaningful features for training the model. Using the `Mediapipe` library, it extracts hand landmarks (the x and y coordinates of 21 points on the hand) from each image to be used as input data for the SVM model. Each gesture is assigned a unique numberic label corresponding to its directoriy (eg. 'A' = 0, 'B' = 1).
+The script `create_dataset.py` processes the captured images into meaningful features for training the model. Using the `Mediapipe` library, it extracts hand landmarks (the x and y coordinates of 21 points on the hand) from each image to be used as input data for the SVM model. Each gesture is assigned a unique numeric label corresponding to its directory (eg. 'A' = 0, 'B' = 1).
 
 #### Steps in Dataset Creation
 1. Launch the script by entering:
@@ -71,10 +71,10 @@ The script `train_svm_classifier.py` trains an SVM (Support Vector Machine) mode
 #### Steps in Model Training
 1. Launch the scripting by entering:
 ```bash
-ptyhon train_svm_classifier.py
+python train_svm_classifier.py
 ```
-2. The script splits the datase into training and testing sets to evaluate model performance. 
-3. Upon completion, an output file called `svm_model.p` will be creating containing the trained SVM model.
+2. The script splits the dataset into training and testing sets to evaluate model performance. 
+3. Upon completion, an output file called `svm_model.p` will be created containing the trained SVM model.
 
 
 ## Installation
