@@ -76,14 +76,14 @@ def generate():
                     mp_drawing_styles.get_default_hand_connections_style()
                 )
 
-                # extract normalized landmark points
+                # extract landmark points
                 for i in range(len(hand_landmarks.landmark)):
                     x = hand_landmarks.landmark[i].x
                     y = hand_landmarks.landmark[i].y
                     x_coords.append(x)
                     y_coords.append(y)
 
-                # calculate features for model prediction
+                # calculate normalized features for model prediction
                 for i in range(len(hand_landmarks.landmark)):
                     x = hand_landmarks.landmark[i].x
                     y = hand_landmarks.landmark[i].y
