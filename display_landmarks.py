@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 print("Visualizing images...")
 
 # directory of images to display landmarks
-DATA_DIR = './sign_iamges'
+DATA_DIR = './sign_images'
 print(f"Checking DATA_DIR at: {os.path.abspath(DATA_DIR)}")
 
 # initialize mediapipe modules
