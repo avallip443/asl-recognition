@@ -71,7 +71,7 @@ def process_image(image_path, class_label, data, labels):
     Args:
         image_path (str): Path to the image.
         class_label (str): Label of the image class.
-        data (list): List to store extracted data points (landmark coordinates).
+        data (list): List to store extracted and normalized data points (landmark coordinates).
         labels (list): List to store corresponding labels for data points.
     """
     print(f"Processing image: {image_path}")
@@ -87,21 +87,29 @@ def process_image(image_path, class_label, data, labels):
     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     
     results = hands.process(img_rgb) 
-        
-    # get hand landmark data
-    data_points = []
+    
+    # Get hand landmark data and normalize
     if results.multi_hand_landmarks:
         for hand_landmarks in results.multi_hand_landmarks:
             x_points = [landmark.x for landmark in hand_landmarks.landmark]
             y_points = [landmark.y for landmark in hand_landmarks.landmark]
-            data_points.extend(zip(x_points, y_points))
-    
-    if len(data_points) == 21:  # 21 landmarks, each with (x, y)
-        data.append(data_points)
-        labels.append(class_label)
-    else:
-        print(f"Skipping image due to incomplete landmarks: {image_path}")
-
+            
+            # Calculate bounding box dimensions
+            width = max(x_points) - min(x_points)
+            height = max(y_points) - min(y_points)
+            
+            # Normalize landmarks
+            normalized_data = []
+            for i in range(len(hand_landmarks.landmark)):
+                normalized_x = (hand_landmarks.landmark[i].x - min(x_points)) / width
+                normalized_y = (hand_landmarks.landmark[i].y - min(y_points)) / height
+                normalized_data.append((normalized_x, normalized_y))
+            
+            if len(normalized_data) == 21:  # Ensure all 21 landmarks are captured
+                data.append(normalized_data)
+                labels.append(class_label)
+            else:
+                print(f"Skipping image due to incomplete landmarks: {image_path}")
 
 def save_dataset(output_file, dataset, labels):
     """
