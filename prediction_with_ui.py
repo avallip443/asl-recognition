@@ -15,7 +15,7 @@ warnings.filterwarnings("ignore", category=UserWarning, message="SymbolDatabase.
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 
 # Load svm model for asl prediction
-model_dict = pickle.load(open('./model/svm_model.p', 'rb'))
+model_dict = pickle.load(open('testsvm_model.p', 'rb'))
 model = model_dict['model']
 
 # set up webcam
@@ -33,12 +33,8 @@ labels_dict = {
     5: 'f', 6: 'g', 7: 'h', 8: 'i', 9: 'j', 
     10: 'k', 11: 'l', 12: 'm', 13: 'n', 14: 'o', 
     15: 'p', 16: 'q', 17: 'r', 18: 's', 19: 't', 
-    20: 'u', 21: 'v', 22: 'w', 23: 'x', 24: 'y', 25: 'z', 
-    26: '0', 27: '1', 28: '2', 29: '3', 30: '4', 
-    31: '5', 32: '6', 33: '7', 34: '8', 35: '9',
-    36: 'I love You', 37: 'yes', 38: 'No', 39: 'Hello', 
-    40: 'Thanks', 41: 'Sorry', 43: 'space'
-}  # TODO: numbers and basic signs
+    20: 'u', 21: 'v', 22: 'w', 23: 'x', 24: 'y', 25: 'z'
+}  
 
 # window for output
 root = tk.Tk()
@@ -131,14 +127,20 @@ def run():
                 y1 = int(min(y_coords) * H) - 10
                 x2 = int(max(x_coords) * W) - 10
                 y2 = int(max(y_coords) * H) - 10
+                
+                
 
-                # make predication using model
-                prediction = model.predict([np.asarray(data_aux)])
-                predicted_character = labels_dict[int(prediction[0])]
+               # Get probability estimates for each class
+                probabilities = model.predict_proba([np.asarray(data_aux)])[0]  # Predict probabilities
 
-                # draw predication on frame
-                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
-                cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3, cv2.LINE_AA)
+                # Find the predicted class and its confidence score
+                predicted_class_index = np.argmax(probabilities)  # Index of the highest probability
+                predicted_character = labels_dict[predicted_class_index]  # Map index to character
+                confidence_score = probabilities[predicted_class_index]  # Highest probability
+
+                # Display prediction and confidence score on the video feed
+                cv2.putText(frame, f"{predicted_character} ({confidence_score:.2f})", 
+                            (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3, cv2.LINE_AA)
 
                 # timer to check if predicated character is same for at least 1 second duration
                 current_time = time.time()
