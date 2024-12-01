@@ -76,14 +76,14 @@ def generate():
                     mp_drawing_styles.get_default_hand_connections_style()
                 )
 
-                # extract normalized landmark points
+                # extract landmark points
                 for i in range(len(hand_landmarks.landmark)):
                     x = hand_landmarks.landmark[i].x
                     y = hand_landmarks.landmark[i].y
                     x_coords.append(x)
                     y_coords.append(y)
 
-                # calculate features for model prediction
+                # calculate normalized features for model prediction
                 for i in range(len(hand_landmarks.landmark)):
                     x = hand_landmarks.landmark[i].x
                     y = hand_landmarks.landmark[i].y
@@ -99,10 +99,7 @@ def generate():
                 # make prediction using the model
                 prediction = model.predict([np.asarray(data_aux)])
                 predicted_character = labels_dict[int(prediction[0])]
-                
-                # calculate confidence score
-                #confidence = max(model.predict_proba([np.asarray(data_aux)])[0]) * 100  # get percentage
-
+            
                 # draw prediction on frame
                 cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
                 cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3, cv2.LINE_AA)
