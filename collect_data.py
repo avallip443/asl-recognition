@@ -2,17 +2,16 @@ import os
 import cv2
 
 # directory to save the dataset
-DATA_DIR = './sign_images'
+DATA_DIR = './new_data'
 if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
 
 # number of classes (eg. A, B) and number of images per class
-NUMBER_OF_CLASSES = 26  
-DATASET_SIZE  = 300  
+NUMBER_OF_CLASSES = 2
+DATASET_SIZE  = 400  
 
 # set up webcam 
 cap = cv2.VideoCapture(0)  # change index if multiple cameras are connected
-
 # image dimensions are 224x224 pixels
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 224)  
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 224)   
@@ -69,7 +68,7 @@ for class_id in range(NUMBER_OF_CLASSES):
         # save captured image
         file_path = os.path.join(class_dir, f'{counter}.jpg')
         
-        try:  # save image to dataset
+        try:
             cv2.imwrite(file_path, frame)
             print(f'Successfully saved: {file_path}')
             counter += 1
